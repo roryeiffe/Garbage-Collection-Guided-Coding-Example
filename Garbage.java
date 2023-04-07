@@ -6,8 +6,9 @@ public class Garbage {
     Garbage field;
 
     public static void main(String[] args) {
-        System.out.println("Creating a new garbage object");
+        System.out.println("Creating 2 new garbage objects");
         Garbage garbage = new Garbage();
+        Garbage garbage1 = new Garbage();
 
         System.out.print("Enter 1 - 5 => ");
         int choice = new Scanner(System.in).nextInt();
@@ -31,11 +32,13 @@ public class Garbage {
                 break;
             case 5:
                 System.out.println("Island of Isolation:");
-                System.out.println("\tCreating 2 garbage objects that reference each other");
-                Garbage garbage1 = new Garbage();
-                Garbage garbage2 = new Garbage();
-                garbage1.field = garbage2;
-                garbage2.field = garbage1;
+                System.out.println("\tMaking the 2 garbage objects reference each other");
+                // Because these objects are only referenced by each other, and nowhere else in the application, they can be
+                // eligible for garbage collection
+                garbage.field = garbage1;
+                garbage1.field = garbage;
+                garbage = null;
+                garbage1 = null;
                 break;
             default:
                 System.out.println("Invalid choice.");

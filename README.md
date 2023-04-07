@@ -43,7 +43,7 @@ public class Garbage {
 
 ## 3. Override the finalize method
 
-In the finalize method, we print out a descriptive message and exit the program:
+In the finalize method, we print out a descriptive message:
 
 ### Garbage.java
 ```java
@@ -58,7 +58,7 @@ public class Garbage {
 
 ## 4. Add a helper method and a field member:
 
-The helper method is used to demonstrate objects being used in a method scope and the field member is used to demonstrate island of isolation. 
+The helper method is used to demonstrate objects going out of scope and the field member is used to demonstrate island of isolation. 
 
 ```java
 public class Garbage {
@@ -83,8 +83,9 @@ public class Garbage {
     Garbage field;
 
     public static void main(String[] args) {
-        System.out.println("Creating a new garbage object");
+        System.out.println("Creating 2 new garbage objects");
         Garbage garbage = new Garbage();
+        Garbage garbage1 = new Garbage();
 
         System.out.print("Enter 1 - 5 => ");
         int choice = new Scanner(System.in).nextInt();
@@ -108,11 +109,13 @@ public class Garbage {
                 break;
             case 5:
                 System.out.println("Island of Isolation:");
-                System.out.println("\tCreating 2 garbage objects that reference each other");
-                Garbage garbage1 = new Garbage();
-                Garbage garbage2 = new Garbage();
-                garbage1.field = garbage2;
-                garbage2.field = garbage1;
+                System.out.println("\tMaking the 2 garbage objects reference each other");
+                // Because these objects are only referenced by each other, and nowhere else in the application, they can be
+                // eligible for garbage collection
+                garbage.field = garbage1;
+                garbage1.field = garbage;
+                garbage = null;
+                garbage1 = null;
                 break;
             default:
                 System.out.println("Invalid choice.");
@@ -120,6 +123,7 @@ public class Garbage {
         }
 
         // Invoke the garbage collection method:
+        // Note that this is not recommended in real-world Java programs because garbage collection is an automatic process
         System.gc();
     }
 
@@ -131,9 +135,10 @@ public class Garbage {
     protected void finalize() {
         System.out.println("\tThis object is being deleted");
     }
+
 }
 ```
 
 
-### Link to the project code if not provided in the same repository as the Guided Coding Example rundown
+### Link to the project code:
 [Full Code](Garbage.java)
