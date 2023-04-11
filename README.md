@@ -20,6 +20,8 @@ Reviewers:
 ## The Object Class Example
 
 ### 1. Create an entity with at least 2 fields and override the methods that are inherited from the object class:
+- Some IDE's have an option to auto-generate these methods but we can also type out the methods manually
+- Either way, make sure to explain what is happening in the methods:
 
 #### Movie.java (Constructors, getters, setters removed for brevity)
 ```java
@@ -31,14 +33,20 @@ public class Movie {
 
     @Override
     public boolean equals(Object o) {
+        // first, check the reference:
         if (this == o) return true;
+        // make sure the object isn't null and ensure the classes match:
         if (o == null || getClass() != o.getClass()) return false;
+        // cast the object to a Movie object:
         Movie movie = (Movie) o;
+        // compare the individual fields:
         return year == movie.year && Double.compare(movie.rating, rating) == 0 && Objects.equals(title, movie.title) && Objects.equals(director, movie.director);
     }
 
     @Override
     public int hashCode() {
+        // Use the Objects.hash method on all of the fields
+        // This is explain in further detail down below:
         return Objects.hash(title, director, year, rating);
     }
 
@@ -134,7 +142,7 @@ ii. Next, comment out the .equals and .hashCode methods in the Movie class and n
 
 iii. Now, try commenting out just the .equals method and just .hashCode and see how the results change.
 
-Make sure to emphasize that it is not good practice to override either hashCode/equals and not the other due to the general contract for the hashCode method, which states that equal objects must have equal hash codes.
+Make sure to emphasize that it is not good practice to override only one of hashCode/equals due to the general contract for the hashCode method, which states that equal objects must have equal hash codes.
 
 ## Non-Access Modifiers
 
@@ -209,6 +217,8 @@ public abstract class Shape {
 public class Animal {
     private String name;
 
+    // If we add the final keyword here, the Dog class will break because we can't
+    // override a final method:
     public void speak() {
         System.out.println("I am a talking animal.");
     }
